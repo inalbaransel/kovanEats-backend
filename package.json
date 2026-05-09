@@ -1,0 +1,47 @@
+{
+  "name": "kovaneats-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inalbaransel/kovanEats-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/inalbaransel/kovanEats-backend/issues"
+  },
+  "homepage": "https://github.com/inalbaransel/kovanEats-backend#readme",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.20.0",
+    "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.6.2",
+    "@types/pg": "^8.20.0",
+    "nodemon": "^3.1.14",
+    "prisma": "^7.8.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
+}
