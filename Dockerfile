@@ -8,8 +8,8 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Bütün paketleri kur
-RUN npm install
+# Bütün paketleri (tipler dahil) kur
+RUN npm install --include=dev
 
 COPY . .
 
