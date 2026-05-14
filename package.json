@@ -1,6 +1,9 @@
 {
   "name": "kovaneats-backend",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
