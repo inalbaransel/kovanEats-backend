@@ -4,7 +4,12 @@ import authRoutes from './api/auth/auth.routes';
 
 export const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: true, // Gelen isteğin origin'ine izin ver (geliştirme aşamasında hayat kurtarır)
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Basic health check
