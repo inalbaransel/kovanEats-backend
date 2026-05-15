@@ -20,3 +20,17 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     next(error);
   }
 };
+
+export const getProfile = async (req: any, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    const user = await authService.getUserById(userId);
+    res.status(200).json({ user });
+  } catch (error) {
+    next(error);
+  }
+};
