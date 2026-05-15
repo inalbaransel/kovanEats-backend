@@ -13,7 +13,7 @@ export const getRestaurants = async (req: Request, res: Response, next: NextFunc
 export const getRestaurantDetails = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { id } = req.params;
-    const restaurant = await restaurantService.getRestaurantById(id);
+    const restaurant = await restaurantService.getRestaurantById(id as string);
     if (!restaurant) {
       res.status(404).json({ error: 'Restaurant not found' });
       return;
