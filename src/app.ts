@@ -2,6 +2,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import authRoutes from './api/auth/auth.routes';
 import restaurantRoutes from './api/restaurants/restaurant.routes';
+import orderRoutes from './api/orders/order.routes';
+import menuRoutes from './api/menu/menu.routes';
 
 export const app = express();
 
@@ -21,6 +23,8 @@ app.get('/health', (req: Request, res: Response) => {
 // Mount routes
 app.use('/api/auth', authRoutes);
 app.use('/api/restaurants', restaurantRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/menu', menuRoutes);
 
 // Global Error Handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
