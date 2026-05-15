@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import authRoutes from './api/auth/auth.routes';
+import restaurantRoutes from './api/restaurants/restaurant.routes';
 
 export const app = express();
 
@@ -19,6 +20,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 // Mount routes
 app.use('/api/auth', authRoutes);
+app.use('/api/restaurants', restaurantRoutes);
 
 // Global Error Handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
