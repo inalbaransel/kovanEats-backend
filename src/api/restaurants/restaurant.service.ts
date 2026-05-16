@@ -38,3 +38,8 @@ export const getRestaurantById = async (id: string) => {
     },
   });
 };
+export const getRestaurantByAdminId = async (adminId: string) => {
+  return await prisma.restaurant.findUnique({
+    where: { adminId },
+  });
+};

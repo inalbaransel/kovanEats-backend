@@ -23,3 +23,21 @@ export const getRestaurantDetails = async (req: Request, res: Response, next: Ne
     next(error);
   }
 };
+
+export const getMyRestaurant = async (req: any, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const adminId = req.user?.userId;
+    if (!adminId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+    const restaurant = await restaurantService.getRestaurantByAdminId(adminId);
+    if (!restaurant) {
+      res.status(404).json({ error: 'Restaurant not found' });
+      return;
+    }
+    res.status(200).json(restaurant);
+  } catch (error) {
+    next(error);
+  }
+};
