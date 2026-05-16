@@ -24,7 +24,7 @@ export const getMyOrders = async (req: any, res: Response, next: NextFunction): 
 export const getRestaurantOrders = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { restaurantId } = req.params;
-    const orders = await orderService.getOrdersByRestaurant(restaurantId);
+    const orders = await orderService.getOrdersByRestaurant(restaurantId as string);
     res.status(200).json(orders);
   } catch (error) {
     next(error);
@@ -35,7 +35,7 @@ export const updateStatus = async (req: Request, res: Response, next: NextFuncti
   try {
     const { id } = req.params;
     const { status } = req.body;
-    const order = await orderService.updateOrderStatus(id, status);
+    const order = await orderService.updateOrderStatus(id as string, status);
     res.status(200).json(order);
   } catch (error) {
     next(error);
