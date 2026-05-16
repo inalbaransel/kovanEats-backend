@@ -43,3 +43,9 @@ export const getRestaurantByAdminId = async (adminId: string) => {
     where: { adminId },
   });
 };
+
+export const createRestaurant = async (data: { name: string; description?: string; address?: string; logoUrl?: string; adminId: string }) => {
+  return await prisma.restaurant.create({
+    data,
+  });
+};

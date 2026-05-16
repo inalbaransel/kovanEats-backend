@@ -41,3 +41,31 @@ export const getMyRestaurant = async (req: any, res: Response, next: NextFunctio
     next(error);
   }
 };
+
+export const createRestaurant = async (req: any, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const adminId = req.user?.userId;
+    if (!adminId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const { name, description, address, logoUrl } = req.body;
+    if (!name) {
+      res.status(400).json({ error: 'Restaurant name is required' });
+      return;
+    }
+
+    const restaurant = await restaurantService.createRestaurant({
+      name,
+      description,
+      address,
+      logoUrl,
+      adminId,
+    });
+
+    res.status(201).json(restaurant);
+  } catch (error) {
+    next(error);
+  }
+};
