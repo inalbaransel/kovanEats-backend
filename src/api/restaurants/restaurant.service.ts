@@ -19,6 +19,9 @@ export const getRestaurantById = async (id: string) => {
     where: { id },
     include: {
       categories: {
+        orderBy: {
+          sortOrder: 'asc',
+        },
         include: {
           menuItems: {
             include: {
