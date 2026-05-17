@@ -1,10 +1,21 @@
-﻿import { prisma } from '../../utils/prisma';
+import { prisma } from '../../utils/prisma';
 
 export const getMenuByRestaurantId = async (restaurantId: string) => {
   return await prisma.category.findMany({
     where: { restaurantId },
     include: {
       menuItems: {
+        include: {
+          itemModifiers: {
+            include: {
+              modifierGroup: {
+                include: {
+                  options: true
+                }
+              }
+            }
+          }
+        },
         orderBy: {
           name: 'asc'
         }
@@ -33,6 +44,16 @@ export const updateCategory = async (id: string, data: any) => {
   });
 };
 
+export const reorderCategories = async (categories: { id: string; sortOrder: number }[]) => {
+  const transactions = categories.map((cat) =>
+    prisma.category.update({
+      where: { id: cat.id },
+      data: { sortOrder: cat.sortOrder },
+    })
+  );
+  return await prisma.$transaction(transactions);
+};
+
 export const deleteCategory = async (id: string) => {
   return await prisma.category.delete({
     where: { id },
@@ -52,9 +73,17 @@ export const createMenuItem = async (data: any) => {
 };
 
 export const updateMenuItem = async (id: string, data: any) => {
+  const { name, description, price, imageUrl, isAvailable, categoryId } = data;
   return await prisma.menuItem.update({
     where: { id },
-    data,
+    data: {
+      name,
+      description,
+      price,
+      imageUrl,
+      isAvailable,
+      categoryId,
+    },
   });
 };
 

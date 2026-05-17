@@ -1,8 +1,9 @@
-﻿import { Router } from 'express';
+import { Router } from 'express';
 import { 
   getMenu, 
   addCategory, 
   updateCategory, 
+  reorderCategories,
   removeCategory, 
   addMenuItem, 
   updateMenuItem, 
@@ -17,6 +18,7 @@ router.get('/:restaurantId', getMenu);
 
 // Sadece restoran admini yönetebilir
 router.post('/category', authenticate as any, authorizeRole('RESTAURANT_ADMIN'), addCategory);
+router.put('/category/reorder', authenticate as any, authorizeRole('RESTAURANT_ADMIN'), reorderCategories);
 router.put('/category/:id', authenticate as any, authorizeRole('RESTAURANT_ADMIN'), updateCategory);
 router.delete('/category/:id', authenticate as any, authorizeRole('RESTAURANT_ADMIN'), removeCategory);
 

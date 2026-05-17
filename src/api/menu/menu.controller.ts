@@ -29,6 +29,16 @@ export const updateCategory = async (req: Request, res: Response, next: NextFunc
   }
 };
 
+export const reorderCategories = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { categories } = req.body;
+    await menuService.reorderCategories(categories);
+    res.status(200).json({ message: 'Categories reordered successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const removeCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {       
   try {
     await menuService.deleteCategory(req.params.id as string);
