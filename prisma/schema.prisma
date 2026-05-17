@@ -54,6 +54,7 @@ model Restaurant {
   name        String
   description String?
   logoUrl     String?
+  coverUrl    String?
   address     String?
   isOpen      Boolean  @default(true)
   createdAt   DateTime @default(now())
