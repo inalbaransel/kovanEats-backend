@@ -61,7 +61,10 @@ export const deleteCategory = async (id: string) => {
 };
 
 export const createMenuItem = async (data: any) => {
-  return await prisma.menuItem.create({
+  const category = await prisma.category.findUnique({ where: { id: data.categoryId } });
+  const restaurantId = category?.restaurantId;
+
+  const item = await prisma.menuItem.create({
     data: {
       name: data.name,
       description: data.description,
@@ -70,21 +73,87 @@ export const createMenuItem = async (data: any) => {
       categoryId: data.categoryId,
     },
   });
+
+  if (data.modifiers && restaurantId) {
+    for (const mod of data.modifiers) {
+      await prisma.modifierGroup.create({
+        data: {
+          name: mod.name,
+          isRequired: mod.isRequired,
+          minSelection: mod.minSelection,
+          maxSelection: mod.maxSelection,
+          restaurantId,
+          options: {
+            create: (mod.options || []).map((opt: any) => ({
+              name: opt.name,
+              priceAdjustment: opt.priceAdjustment,
+            })),
+          },
+          menuItems: {
+            create: {
+              menuItemId: item.id
+            }
+          }
+        }
+      });
+    }
+  }
+
+  return item;
 };
 
 export const updateMenuItem = async (id: string, data: any) => {
-  const { name, description, price, imageUrl, isAvailable, categoryId } = data;
-  return await prisma.menuItem.update({
-    where: { id },
-    data: {
-      name,
-      description,
-      price,
-      imageUrl,
-      isAvailable,
-      categoryId,
-    },
+  const { name, description, price, imageUrl, isAvailable, categoryId, modifiers } = data;
+  
+  const category = await prisma.category.findUnique({ where: { id: categoryId } });
+  const restaurantId = category?.restaurantId;
+
+  // Mevcut bağlantıları ve grupları bul (Güncelleme için eskileri sileceğiz)
+  const existingLinks = await prisma.itemModifierGroup.findMany({
+    where: { menuItemId: id },
+    select: { modifierGroupId: true }
   });
+  const oldGroupIds = existingLinks.map(l => l.modifierGroupId);
+
+  const updated = await prisma.menuItem.update({
+    where: { id },
+    data: { name, description, price, imageUrl, isAvailable, categoryId },
+  });
+
+  if (modifiers && restaurantId) {
+    // Eskileri temizle
+    if (oldGroupIds.length > 0) {
+      await prisma.modifierGroup.deleteMany({
+        where: { id: { in: oldGroupIds } }
+      });
+    }
+
+    // Yenileri oluştur
+    for (const mod of modifiers) {
+      await prisma.modifierGroup.create({
+        data: {
+          name: mod.name,
+          isRequired: mod.isRequired,
+          minSelection: mod.minSelection,
+          maxSelection: mod.maxSelection,
+          restaurantId,
+          options: {
+            create: (mod.options || []).map((opt: any) => ({
+              name: opt.name,
+              priceAdjustment: opt.priceAdjustment,
+            })),
+          },
+          menuItems: {
+            create: {
+              menuItemId: id
+            }
+          }
+        }
+      });
+    }
+  }
+
+  return updated;
 };
 
 export const deleteMenuItem = async (id: string) => {
