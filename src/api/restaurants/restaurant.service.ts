@@ -8,6 +8,7 @@ export const getAllRestaurants = async () => {
       name: true,
       description: true,
       logoUrl: true,
+      coverUrl: true,
       address: true,
       isOpen: true,
     },
@@ -49,6 +50,13 @@ export const getRestaurantByAdminId = async (adminId: string) => {
 
 export const createRestaurant = async (data: { name: string; description?: string; address?: string; logoUrl?: string; adminId: string }) => {
   return await prisma.restaurant.create({
+    data,
+  });
+};
+
+export const updateRestaurantSettings = async (id: string, data: { coverUrl?: string; logoUrl?: string }) => {
+  return await prisma.restaurant.update({
+    where: { id },
     data,
   });
 };

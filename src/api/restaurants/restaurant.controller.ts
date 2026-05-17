@@ -69,3 +69,30 @@ export const createRestaurant = async (req: any, res: Response, next: NextFuncti
     next(error);
   }
 };
+
+export const updateMyRestaurant = async (req: any, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const adminId = req.user?.userId;
+    if (!adminId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const restaurant = await restaurantService.getRestaurantByAdminId(adminId);
+    if (!restaurant) {
+      res.status(404).json({ error: 'Restaurant not found' });
+      return;
+    }
+
+    const { coverUrl, logoUrl } = req.body;
+    
+    const updatedRestaurant = await restaurantService.updateRestaurantSettings(restaurant.id, {
+      coverUrl,
+      logoUrl,
+    });
+
+    res.status(200).json(updatedRestaurant);
+  } catch (error) {
+    next(error);
+  }
+};
